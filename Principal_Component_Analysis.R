@@ -24,10 +24,10 @@ library(caret)
   # function to display the row as an image 
   picimage <- function(testmatrix)    image(t(apply(testmatrix, 2, rev)),col=gray(12:1/12))
   
-  #test my image at rowA 3097 = 2
+  #test my image at rowA 3097(2)
   testmatrix <- matrix(X[digitA,],28,28,byrow = T);picimage(testmatrix)
   
-  #test my image at rowB 6097 = 6
+  #test my image at rowB 6097(6)
   testmatrix <- matrix(X[digitB,],28,28,byrow = T);picimage(testmatrix)
   
   # mu (mean vector)
@@ -90,13 +90,13 @@ library(caret)
   df_B    <- dplyr::filter(newdf,digit==dig_B) %>% select(P1,P2); count(df_B)
   df_A    <- dplyr::filter(newdf,digit==dig_A) %>% select(P1,P2); count(df_A)
   
-  # plot my first two PCAS for the digit 5 & 7
+  # plot my first two PCAS for the digits
   plot(newdf$P1,newdf$P2, col=newdf$digit)
   ggplot(newdf, aes(x=newdf$P1, y=newdf$P2, color=newdf$digit)) +  geom_point() + theme(panel.background = element_rect(fill = 'gray'))
   
 
  #############################################################################
-  # Histogram for digit 5 & 7
+  # Histogram distribution for the two digits
   
   # Histogram range. pc1 direction
   Min_P1Vector=min(newdf$P1); Max_P1Vector=max(newdf$P1);Max_P1Vector;Min_P1Vector
@@ -136,17 +136,12 @@ for (i in 1:(dim(newdf)[1]))
  #check how my histigram looks
  image(myAHistarray); image(myAHistarray)
  image(myBHistarray); image(myBHistarray)
- #*************************************************************************************************
-# write my histogram and min max
-
- 
+#*************************************************************************************************
 #*************************************************************************************************
 
-# check Histogram Probability @ row 9360 & 3098
+# check Histogram Probability
 
   row_B <- newdf[digitB,]
-  #r<- round(1+((P1BinsCount -1)*((row_B$P1-Min_P1Vector)/( Max_P1Vector-Min_P1Vector))));r
-  #c<- round(1+((P1BinsCount -1)*((row_B$P2-Min_P1Vector)/( Max_P1Vector-Min_P1Vector))));c
   
   r= round(1+((P1BinsCount -1)*((row_B$P1-Min_P1Vector)/( Max_P1Vector-Min_P1Vector))));r
   c= round(1+((P2BinsCount -1)*((row_B$P2-Min_P2Vector)/( Max_P2Vector-Min_P2Vector))));c
@@ -155,8 +150,7 @@ for (i in 1:(dim(newdf)[1]))
   myBProb <- myBHistarray[r,c]/(myBHistarray[r,c]+myAHistarray[r,c]);myBProb
  
   row_A <- newdf[digitA,]
-  #r<- round(1+((P1BinsCount -1)*((row_A$P1-Min_P1Vector)/( Max_P1Vector-Min_P1Vector))));r
-  #c<- round(1+((P1BinsCount -1)*((row_A$P2-Min_P1Vector)/( Max_P1Vector-Min_P1Vector))));c
+ 
   
   r= round(1+((P1BinsCount -1)*((row_A$P1-Min_P1Vector)/( Max_P1Vector-Min_P1Vector))));r
   c= round(1+((P2BinsCount -1)*((row_A$P2-Min_P2Vector)/( Max_P2Vector-Min_P2Vector))));c
@@ -166,7 +160,7 @@ for (i in 1:(dim(newdf)[1]))
 
 
 ##################################################################################################################
-  #Bayes Probability
+  #Naive Bayes Probability
   
   # B= positive and A=negative
   # Np (class +1 number of samples) and Nn (class -1 number of samples)
@@ -208,15 +202,12 @@ for (i in 1:(dim(newdf)[1]))
   # Result of classifying xn using Bayesian
   ProbXnBayes <- MA/(FB+MA)
   
-#**************************************************************************************************************
-  write.csv2(rbind(N_PA,N_PA, mean_PB,mean_PA,Cov_B,Cov_A),file="/Users/renatoroschel/Dropbox/AA-UCSC/Introduction\ to\ Machine\ Learning\ and\ Data\ Mining/Assignments/Assignment3/result03.csv")
-  
-  ############################################################################################
+############################################################################################
   
   
-  #############################################################################################
-  # We are doing the accurancy now, we have to built a new column with actual value and precicted value
-  #############################################################################################
+#############################################################################################
+# We are doing the accurancy now, we have to built a new column with actual value and precicted value
+#############################################################################################
   
   myXProbV=newdf
   # i have to it for histogram and bayes propability...
@@ -236,9 +227,9 @@ for (i in 1:(dim(newdf)[1]))
   
   confusionMatrix(myXProbV$predicted, myXProbV$digit)
   
-  ############################################################################################
-  # Accurancy with Bayes
-  ############################################################################################
+############################################################################################
+  # Accurancy with Naive Bayes
+############################################################################################
   
   myXProbVBayes=newdf
  
